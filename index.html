@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Non-Monetary Betting App</title>
+  <title>Betting App</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,108 +20,125 @@
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
-    select, button {
-      font-size: 16px;
-      margin: 10px 0;
-      padding: 10px;
+    table {
       width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border-collapse: collapse;
     }
-    .result {
-      font-size: 20px;
-      font-weight: bold;
-      margin-top: 20px;
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
+    .popup-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Non-Monetary Betting</h1>
-    <p>Select predefined odds and assign outcomes:</p>
+    <h1>Betting Table</h1>
+    <table>
+      <tr>
+        <th>Bet</th>
+        <th>Odds</th>
+      </tr>
+      <tr>
+        <td>Single Shot</td>
+        <td><button onclick="handleBet('1.5')">1.5</button></td>
+      </tr>
+      <tr>
+        <td>Beer</td>
+        <td><button onclick="handleBet('1.25')">1.25</button></td>
+      </tr>
+      <tr>
+        <td>Beer with Vodka</td>
+        <td><button onclick="handleBet('1.54')">1.54</button></td>
+      </tr>
+    </table>
+  </div>
 
-    <label for="odds">Choose Odds:</label>
-    <select id="odds">
-      <option value="50-50">50/50</option>
-      <option value="33-67">1/2 vs. 2/1</option>
-      <option value="25-75">1/3 vs. 3/1</option>
-    </select>
-
-    <label for="player1">Player 1 Name:</label>
-    <input type="text" id="player1" placeholder="Enter Player 1 Name">
-
-    <label for="player2">Player 2 Name:</label>
-    <input type="text" id="player2" placeholder="Enter Player 2 Name">
-
-    <button id="assign">Assign Odds</button>
-
-    <div id="assignResult"></div>
-
-    <button id="spin" style="display: none;">Spin!</button>
-
-    <div class="result" id="result"></div>
+  <div class="popup" id="popup">
+    <div class="popup-content" id="popup-content">
+      <p id="popup-message"></p>
+      <div id="popup-buttons">
+        <button onclick="confirmBet(true)">Yes</button>
+        <button onclick="confirmBet(false)">No</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    const odds = document.getElementById('odds');
-    const player1 = document.getElementById('player1');
-    const player2 = document.getElementById('player2');
-    const assignButton = document.getElementById('assign');
-    const spinButton = document.getElementById('spin');
-    const assignResult = document.getElementById('assignResult');
-    const result = document.getElementById('result');
+    let selectedBet = null;
 
-    let assignedOdds = null;
-    let players = {};
+    function handleBet(bet) {
+      selectedBet = bet;
+      document.getElementById('popup-message').innerText = `You selected odds of ${bet}. Are you sure you want to place this bet?`;
+      document.getElementById('popup-buttons').style.display = 'block';
+      document.getElementById('popup').style.display = 'flex';
+    }
 
-    assignButton.addEventListener('click', () => {
-      const p1 = player1.value.trim();
-      const p2 = player2.value.trim();
-
-      if (!p1 || !p2) {
-        alert('Please enter names for both players.');
+    function confirmBet(isConfirmed) {
+      if (!isConfirmed) {
+        document.getElementById('popup').style.display = 'none';
         return;
       }
 
-      const selectedOdds = odds.value;
-      let oddsText;
+      // Start the countdown
+      const popupMessage = document.getElementById('popup-message');
+      document.getElementById('popup-buttons').style.display = 'none';
+      let countdown = 3;
+      popupMessage.innerText = `${countdown}...`;
 
-      switch (selectedOdds) {
-        case '50-50':
-          oddsText = `${p1}: 50% vs. ${p2}: 50%`;
-          assignedOdds = [50, 50];
-          break;
-        case '33-67':
-          oddsText = `${p1}: 33% vs. ${p2}: 67%`;
-          assignedOdds = [33, 67];
-          break;
-        case '25-75':
-          oddsText = `${p1}: 25% vs. ${p2}: 75%`;
-          assignedOdds = [25, 75];
-          break;
-        default:
-          alert('Invalid odds selected.');
-          return;
-      }
+      const interval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          popupMessage.innerText = `${countdown}...`;
+        } else {
+          clearInterval(interval);
+          revealOutcome();
+        }
+      }, 1000);
+    }
 
-      players = { p1, p2 };
-      assignResult.textContent = `Assigned Odds: ${oddsText}`;
-      spinButton.style.display = 'block';
-      result.textContent = '';
-    });
-
-    spinButton.addEventListener('click', () => {
-      if (!assignedOdds || !players.p1 || !players.p2) {
-        alert('Please assign odds first.');
-        return;
-      }
-
-      const random = Math.random() * 100;
-      const loser = random <= assignedOdds[0] ? players.p1 : players.p2;
-      const forfeit = loser === players.p1 ? 'Drink A' : 'Drink B';
-
-      result.textContent = `${loser} loses! Forfeit: ${forfeit}`;
-    });
+    function revealOutcome() {
+      const popupMessage = document.getElementById('popup-message');
+      const outcome = Math.random() < 0.5 ? 'Win!' : 'Lose!';
+      popupMessage.innerText = `The outcome is: ${outcome}`;
+      setTimeout(() => {
+        document.getElementById('popup').style.display = 'none';
+      }, 3000);
+    }
   </script>
 </body>
 </html>
