@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Betting App</title>
+  <title>Non-Monetary Betting App</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -20,29 +20,16 @@
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ddd;
+    .option {
+      margin: 10px 0;
       padding: 10px;
-      text-align: center;
-    }
-    th {
-      background-color: #f4f4f4;
-    }
-    button {
-      font-size: 16px;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
+      border: 1px solid #ccc;
       border-radius: 5px;
       cursor: pointer;
+      background: #fff;
     }
-    button:hover {
-      background-color: #0056b3;
+    .option:hover {
+      background: #f0f0f0;
     }
     .popup {
       position: fixed;
@@ -50,12 +37,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
-      display: none;
     }
     .popup-content {
       background: white;
@@ -63,81 +48,73 @@
       border-radius: 10px;
       text-align: center;
     }
+    .popup button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .popup button:hover {
+      background: #ddd;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Betting Table</h1>
-    <table>
-      <tr>
-        <th>Bet</th>
-        <th>Odds</th>
-      </tr>
-      <tr>
-        <td>Single Shot</td>
-        <td><button onclick="handleBet('1.5')">1.5</button></td>
-      </tr>
-      <tr>
-        <td>Beer</td>
-        <td><button onclick="handleBet('1.25')">1.25</button></td>
-      </tr>
-      <tr>
-        <td>Beer with Vodka</td>
-        <td><button onclick="handleBet('1.54')">1.54</button></td>
-      </tr>
-    </table>
+    <h1>Non-Monetary Betting App</h1>
+    <div class="option" onclick="handleOption('Single Shot vs Shot Triple Jump', '1.5', '3')">
+      Single Shot vs Shot Triple Jump (1.5 / 3)
+    </div>
+    <div class="option" onclick="handleOption('Beer vs Dos Beer Shoey', '1.25', '5')">
+      Beer vs Dos Beer Shoey (1.25 / 5)
+    </div>
+    <div class="option" onclick="handleOption('Dos Doubles vs Tour LBR', '1.2', '5.88')">
+      Dos Doubles vs Tour LBR (1.2 / 5.88)
+    </div>
+    <div class="option" onclick="handleOption('Beer vs Beer with Vodka', '1.54', '2.86')">
+      Beer vs Beer with Vodka (1.54 / 2.86)
+    </div>
+    <div class="option" onclick="handleOption('Tour LBR vs Everyone Else Tour LBR', '1.11', '10')">
+      Tour LBR vs Everyone Else Tour LBR (1.11 / 10)
+    </div>
   </div>
 
-  <div class="popup" id="popup">
-    <div class="popup-content" id="popup-content">
-      <p id="popup-message"></p>
-      <div id="popup-buttons">
-        <button onclick="confirmBet(true)">Yes</button>
-        <button onclick="confirmBet(false)">No</button>
-      </div>
+  <div id="popup" class="popup" style="display: none;">
+    <div class="popup-content">
+      <p id="popup-text"></p>
+      <button onclick="confirmBet()">Yes</button>
+      <button onclick="closePopup()">No</button>
     </div>
   </div>
 
   <script>
-    let selectedBet = null;
+    let selectedOption = '';
 
-    function handleBet(bet) {
-      selectedBet = bet;
-      document.getElementById('popup-message').innerText = `You selected odds of ${bet}. Are you sure you want to place this bet?`;
-      document.getElementById('popup-buttons').style.display = 'block';
+    function handleOption(optionText, odds1, odds2) {
+      selectedOption = optionText;
+      const popupText = `You selected: ${optionText} (Odds: ${odds1} / ${odds2}). Are you sure you want to place this bet?`;
+      document.getElementById('popup-text').innerText = popupText;
       document.getElementById('popup').style.display = 'flex';
     }
 
-    function confirmBet(isConfirmed) {
-      if (!isConfirmed) {
-        document.getElementById('popup').style.display = 'none';
-        return;
-      }
-
-      // Start the countdown
-      const popupMessage = document.getElementById('popup-message');
-      document.getElementById('popup-buttons').style.display = 'none';
-      let countdown = 3;
-      popupMessage.innerText = `${countdown}...`;
-
-      const interval = setInterval(() => {
-        countdown--;
-        if (countdown > 0) {
-          popupMessage.innerText = `${countdown}...`;
-        } else {
-          clearInterval(interval);
-          revealOutcome();
-        }
-      }, 1000);
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
     }
 
-    function revealOutcome() {
-      const popupMessage = document.getElementById('popup-message');
-      const outcome = Math.random() < 0.5 ? 'Win!' : 'Lose!';
-      popupMessage.innerText = `The outcome is: ${outcome}`;
-      setTimeout(() => {
-        document.getElementById('popup').style.display = 'none';
-      }, 3000);
+    function confirmBet() {
+      let countdown = 3;
+      const popupText = document.getElementById('popup-text');
+      const interval = setInterval(() => {
+        if (countdown > 0) {
+          popupText.innerText = `Starting in... ${countdown}`;
+          countdown--;
+        } else {
+          clearInterval(interval);
+          popupText.innerText = `Outcome: ${Math.random() < 0.5 ? 'Win' : 'Lose'}!`;
+          setTimeout(closePopup, 3000);
+        }
+      }, 1000);
     }
   </script>
 </body>
