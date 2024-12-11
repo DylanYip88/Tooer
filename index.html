@@ -1,121 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Non-Monetary Betting App</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-    .container {
-      margin: 20px auto;
-      max-width: 400px;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    .option {
-      margin: 10px 0;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      cursor: pointer;
-      background: #fff;
-    }
-    .option:hover {
-      background: #f0f0f0;
-    }
-    .popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .popup-content {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-    }
-    .popup button {
-      margin: 5px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .popup button:hover {
-      background: #ddd;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Monetary Betting App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        select, button {
+            font-size: 16px;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Non-Monetary Betting App</h1>
-    <div class="option" onclick="handleOption('Single Shot vs Shot Triple Jump', '1.5', '3')">
-      Single Shot vs Shot Triple Jump (1.5 / 3)
+    <div class="container">
+        <h1>Non-Monetary Betting</h1>
+        <div id="betting-options">
+            <div>
+                <h3>Single Shot / Shot Triple Jump</h3>
+                <button onclick="placeBet('Single Shot')">1.5</button>
+                <button onclick="placeBet('Shot Triple Jump')">3</button>
+            </div>
+            <div>
+                <h3>Beer / Dos Beer Shoey</h3>
+                <button onclick="placeBet('Beer')">1.25</button>
+                <button onclick="placeBet('Dos Beer Shoey')">5</button>
+            </div>
+            <div>
+                <h3>Dos Doubles / Tour LBR</h3>
+                <button onclick="placeBet('Dos Doubles')">1.2</button>
+                <button onclick="placeBet('Tour LBR')">5.88</button>
+            </div>
+            <div>
+                <h3>Beer / Beer with Vodka</h3>
+                <button onclick="placeBet('Beer')">1.54</button>
+                <button onclick="placeBet('Beer with Vodka')">2.86</button>
+            </div>
+            <div>
+                <h3>Tour LBR / Everyone Else Tour LBR</h3>
+                <button onclick="placeBet('Tour LBR')">1.11</button>
+                <button onclick="placeBet('Everyone Else Tour LBR')">10</button>
+            </div>
+        </div>
     </div>
-    <div class="option" onclick="handleOption('Beer vs Dos Beer Shoey', '1.25', '5')">
-      Beer vs Dos Beer Shoey (1.25 / 5)
-    </div>
-    <div class="option" onclick="handleOption('Dos Doubles vs Tour LBR', '1.2', '5.88')">
-      Dos Doubles vs Tour LBR (1.2 / 5.88)
-    </div>
-    <div class="option" onclick="handleOption('Beer vs Beer with Vodka', '1.54', '2.86')">
-      Beer vs Beer with Vodka (1.54 / 2.86)
-    </div>
-    <div class="option" onclick="handleOption('Tour LBR vs Everyone Else Tour LBR', '1.11', '10')">
-      Tour LBR vs Everyone Else Tour LBR (1.11 / 10)
-    </div>
-  </div>
 
-  <div id="popup" class="popup" style="display: none;">
-    <div class="popup-content">
-      <p id="popup-text"></p>
-      <button onclick="confirmBet()">Yes</button>
-      <button onclick="closePopup()">No</button>
-    </div>
-  </div>
-
-  <script>
-    let selectedOption = '';
-
-    function handleOption(optionText, odds1, odds2) {
-      selectedOption = optionText;
-      const popupText = `You selected: ${optionText} (Odds: ${odds1} / ${odds2}). Are you sure you want to place this bet?`;
-      document.getElementById('popup-text').innerText = popupText;
-      document.getElementById('popup').style.display = 'flex';
-    }
-
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-    }
-
-    function confirmBet() {
-      let countdown = 3;
-      const popupText = document.getElementById('popup-text');
-      const interval = setInterval(() => {
-        if (countdown > 0) {
-          popupText.innerText = `Starting in... ${countdown}`;
-          countdown--;
-        } else {
-          clearInterval(interval);
-          popupText.innerText = `Outcome: ${Math.random() < 0.5 ? 'Win' : 'Lose'}!`;
-          setTimeout(closePopup, 3000);
+    <script>
+        function placeBet(drink) {
+            const confirmation = confirm(`Outcome: ${drink}\nAre you sure you want to place this bet?`);
+            if (confirmation) {
+                countdownToReveal(drink);
+            }
         }
-      }, 1000);
-    }
-  </script>
+
+        function countdownToReveal(drink) {
+            let countdown = 3;
+            const interval = setInterval(() => {
+                alert(countdown);
+                countdown--;
+                if (countdown === 0) {
+                    clearInterval(interval);
+                    alert(`Outcome: ${drink}`);
+                }
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
