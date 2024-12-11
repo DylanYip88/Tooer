@@ -8,9 +8,9 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
         }
         .container {
             margin: 20px auto;
@@ -20,27 +20,16 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
         button {
             font-size: 16px;
-            padding: 5px 10px;
-            margin: 5px 0;
-            cursor: pointer;
-            border: none;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #007BFF;
             color: white;
+            cursor: pointer;
         }
         button:hover {
             background-color: #0056b3;
@@ -50,53 +39,33 @@
 <body>
     <div class="container">
         <h1>Non-Monetary Betting App</h1>
-        <table>
-            <tr>
-                <th>Drink 1</th>
-                <th>Drink 2</th>
-                <th>Odds</th>
-            </tr>
-            <tr>
-                <td>Single shot</td>
-                <td>Shot triple jump</td>
-                <td><button onclick="startBet('Single shot', 'Shot triple jump', 1.5)">1.5</button></td>
-            </tr>
-            <tr>
-                <td>Beer</td>
-                <td>Dos beer shoey</td>
-                <td><button onclick="startBet('Beer', 'Dos beer shoey', 1.25)">1.25</button></td>
-            </tr>
-            <tr>
-                <td>Dos doubles</td>
-                <td>Tour LBR</td>
-                <td><button onclick="startBet('Dos doubles', 'Tour LBR', 1.2)">1.2</button></td>
-            </tr>
-            <tr>
-                <td>Beer</td>
-                <td>Beer with vodka</td>
-                <td><button onclick="startBet('Beer', 'Beer with vodka', 1.54)">1.54</button></td>
-            </tr>
-            <tr>
-                <td>Tour LBR</td>
-                <td>Everyone else Tour LBR</td>
-                <td><button onclick="startBet('Tour LBR', 'Everyone else Tour LBR', 1.11)">1.11</button></td>
-            </tr>
-        </table>
+        <p>Choose your odds:</p>
+        <button onclick="placeBet('1.5 / 3', 'Single Shot', 'Shot Triple Jump')">1.5 / 3</button>
+        <button onclick="placeBet('1.25 / 5', 'Beer', 'Dos Beer Shoey')">1.25 / 5</button>
+        <button onclick="placeBet('1.2 / 5.88', 'Dos Doubles', 'Tour LBR')">1.2 / 5.88</button>
+        <button onclick="placeBet('1.54 / 2.86', 'Beer', 'Beer with Vodka')">1.54 / 2.86</button>
+        <button onclick="placeBet('1.11 / 10', 'Tour LBR', 'Everyone Else Tour LBR')">1.11 / 10</button>
     </div>
 
     <script>
-        function startBet(drink1, drink2, odds) {
-            const isWin = Math.random() < (1 / odds);
-            const outcome = isWin ? drink1 : drink2;
+        function placeBet(odds, drink1, drink2) {
+            const confirmBet = confirm(`You selected odds: ${odds}\nOutcome if win: ${drink1}\nOutcome if lose: ${drink2}\nAre you sure you want to place this bet?`);
+            if (confirmBet) {
+                countdownAndReveal(odds, drink1, drink2);
+            }
+        }
 
+        function countdownAndReveal(odds, drink1, drink2) {
             let countdown = 3;
             const countdownInterval = setInterval(() => {
-                if (countdown > 0) {
-                    alert(`Countdown: ${countdown}`);
-                    countdown--;
-                } else {
+                alert(`${countdown}...`);
+                countdown--;
+                if (countdown === 0) {
                     clearInterval(countdownInterval);
-                    alert(`Outcome: ${outcome}`);
+
+                    // Determine the outcome
+                    const result = Math.random() < 0.5 ? drink1 : drink2;
+                    alert(`Outcome: ${result}`);
                 }
             }, 1000);
         }
