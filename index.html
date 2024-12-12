@@ -20,6 +20,15 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
         }
+        .superboost {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: black;
+            color: yellow;
+            font-weight: bold;
+            border: 2px solid yellow;
+            border-radius: 5px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -46,33 +55,19 @@
         button:hover {
             background-color: #0056b3;
         }
-        #popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            display: none;
-            z-index: 1000;
-        }
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 999;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Phallus365</h2>
+
+        <!-- Superboost Section -->
+        <div class="superboost">
+            Superboost: Drink of your choice
+            <button onclick="placeSuperboostBet()">2</button>
+        </div>
+
+        <!-- Main Table -->
         <table>
             <thead>
                 <tr>
@@ -85,57 +80,46 @@
                 <tr>
                     <td>Single Shot</td>
                     <td>Shot Triple Jump</td>
-                    <td><button onclick="placeBet('Single Shot', 'Shot Triple Jump', 1.5, 3)">1.5 - 3</button></td>
+                    <td><button onclick="placeBet('Single Shot', 'Shot Triple Jump', '1.5 - 3')">1.5 - 3</button></td>
                 </tr>
                 <tr>
                     <td>Beer</td>
                     <td>Dos Beer Shoey</td>
-                    <td><button onclick="placeBet('Beer', 'Dos Beer Shoey', 1.25, 5)">1.25 - 5</button></td>
+                    <td><button onclick="placeBet('Beer', 'Dos Beer Shoey', '1.25 - 5')">1.25 - 5</button></td>
                 </tr>
                 <tr>
                     <td>Dos Doubles</td>
                     <td>Tour LBR</td>
-                    <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', 1.2, 5.88)">1.2 - 5.88</button></td>
+                    <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', '1.2 - 5.88')">1.2 - 5.88</button></td>
                 </tr>
                 <tr>
                     <td>Beer</td>
                     <td>Beer with Vodka</td>
-                    <td><button onclick="placeBet('Beer', 'Beer with Vodka', 1.54, 2.86)">1.54 - 2.86</button></td>
+                    <td><button onclick="placeBet('Beer', 'Beer with Vodka', '1.54 - 2.86')">1.54 - 2.86</button></td>
                 </tr>
                 <tr>
                     <td>Tour LBR</td>
                     <td>Everyone Else Tour LBR</td>
-                    <td><button onclick="placeBet('Tour LBR', 'Everyone Else Tour LBR', 1.11, 10)">1.11 - 10</button></td>
+                    <td><button onclick="placeBet('Tour LBR', 'Everyone Else Tour LBR', '1.11 - 10')">1.11 - 10</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div id="overlay"></div>
-    <div id="popup">
-        <p id="popup-message"></p>
-        <div id="popup-buttons">
-            <button onclick="confirmBet(true)">Yes</button>
-            <button onclick="confirmBet(false)">No</button>
-        </div>
-    </div>
-
     <script>
-        let currentBet = null;
+        function placeBet(drink1, drink2, odds) {
+            if (confirm(`You have selected: ${drink1} versus ${drink2}. Are you sure you want to place this bet?`)) {
+                const popupMessage = document.createElement('div');
+                popupMessage.style.position = 'fixed';
+                popupMessage.style.top = '50%';
+                popupMessage.style.left = '50%';
+                popupMessage.style.transform = 'translate(-50%, -50%)';
+                popupMessage.style.backgroundColor = 'white';
+                popupMessage.style.padding = '20px';
+                popupMessage.style.border = '2px solid black';
+                popupMessage.style.textAlign = 'center';
+                document.body.appendChild(popupMessage);
 
-        function placeBet(drink1, drink2, odds1, odds2) {
-            currentBet = { drink1, drink2, odds1, odds2 };
-            document.getElementById('popup-message').innerText = `You have selected: ${drink1} versus ${drink2}. Are you sure you want to place this bet?`;
-            document.getElementById('popup-buttons').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('overlay').style.display = 'block';
-        }
-
-        function confirmBet(isConfirmed) {
-            if (isConfirmed) {
-                // Start the countdown
-                const popupMessage = document.getElementById('popup-message');
-                document.getElementById('popup-buttons').style.display = 'none';
                 let countdown = 3;
                 popupMessage.innerText = `${countdown}...`;
 
@@ -145,31 +129,48 @@
                         popupMessage.innerText = `${countdown}...`;
                     } else {
                         clearInterval(interval);
-                        revealOutcome();
+                        const drink1Chance = 1 / parseFloat(odds.split(' - ')[0]);
+                        const drink2Chance = 1 / parseFloat(odds.split(' - ')[1]);
+                        const totalChance = drink1Chance + drink2Chance;
+
+                        const outcome = Math.random() < drink1Chance / totalChance ? drink1 : drink2;
+                        popupMessage.innerText = `Outcome: ${outcome}`;
+
+                        setTimeout(() => document.body.removeChild(popupMessage), 3000);
                     }
                 }, 1000);
-            } else {
-                closePopup();
             }
         }
 
-        function revealOutcome() {
-            const { drink1, drink2, odds1, odds2 } = currentBet;
-            const prob1 = 1 / odds1;
-            const prob2 = 1 / odds2;
-            const totalProb = prob1 + prob2;
-            const normalizedProb1 = prob1 / totalProb;
+        function placeSuperboostBet() {
+            if (confirm(`You have selected: Superboost - Drink of your choice. Are you sure you want to place this bet?`)) {
+                const popupMessage = document.createElement('div');
+                popupMessage.style.position = 'fixed';
+                popupMessage.style.top = '50%';
+                popupMessage.style.left = '50%';
+                popupMessage.style.transform = 'translate(-50%, -50%)';
+                popupMessage.style.backgroundColor = 'white';
+                popupMessage.style.padding = '20px';
+                popupMessage.style.border = '2px solid black';
+                popupMessage.style.textAlign = 'center';
+                document.body.appendChild(popupMessage);
 
-            const outcome = Math.random() < normalizedProb1 ? drink1 : drink2;
-            document.getElementById('popup-message').innerText = `Outcome: ${outcome}`;
+                let countdown = 3;
+                popupMessage.innerText = `${countdown}...`;
 
-            setTimeout(closePopup, 3000); // Close popup after showing the outcome
-        }
+                const interval = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        popupMessage.innerText = `${countdown}...`;
+                    } else {
+                        clearInterval(interval);
+                        const outcome = Math.random() < 0.5 ? 'Jack Drinks' : 'Opposition Drinks';
+                        popupMessage.innerText = `Outcome: ${outcome}`;
 
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-            currentBet = null;
+                        setTimeout(() => document.body.removeChild(popupMessage), 3000);
+                    }
+                }, 1000);
+            }
         }
     </script>
 </body>
