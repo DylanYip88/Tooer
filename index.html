@@ -79,35 +79,41 @@
                 <tr>
                     <td>Single Shot</td>
                     <td>Shot Triple Jump</td>
-                    <td><button onclick="placeBet('Single Shot', 'Shot Triple Jump', '1.5 - 3')">1.5 - 3</button></td>
+                    <td><button onclick="placeBet('Single Shot', 'Shot Triple Jump', 1.5, 3)">1.5 - 3</button></td>
                 </tr>
                 <tr>
                     <td>Beer</td>
                     <td>Dos Beer Shoey</td>
-                    <td><button onclick="placeBet('Beer', 'Dos Beer Shoey', '1.25 - 5')">1.25 - 5</button></td>
+                    <td><button onclick="placeBet('Beer', 'Dos Beer Shoey', 1.25, 5)">1.25 - 5</button></td>
                 </tr>
                 <tr>
                     <td>Dos Doubles</td>
                     <td>Tour LBR</td>
-                    <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', '1.2 - 5.88')">1.2 - 5.88</button></td>
+                    <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', 1.2, 5.88)">1.2 - 5.88</button></td>
                 </tr>
                 <tr>
                     <td>Beer</td>
                     <td>Beer with Vodka</td>
-                    <td><button onclick="placeBet('Beer', 'Beer with Vodka', '1.54 - 2.86')">1.54 - 2.86</button></td>
+                    <td><button onclick="placeBet('Beer', 'Beer with Vodka', 1.54, 2.86)">1.54 - 2.86</button></td>
                 </tr>
                 <tr>
                     <td>Tour LBR</td>
                     <td>Everyone Else Tour LBR</td>
-                    <td><button onclick="placeBet('Tour LBR', 'Everyone Else Tour LBR', '1.11 - 10')">1.11 - 10</button></td>
+                    <td><button onclick="placeBet('Tour LBR', 'Everyone Else Tour LBR', 1.11, 10)">1.11 - 10</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <script>
-        function placeBet(drink1, drink2, odds) {
-            if (confirm(`You have selected: ${drink1} versus ${drink2}. Are you sure you want to place this bet?`)) {
+        function placeBet(drink1, drink2, odd1, odd2) {
+            const prob1 = (1 / odd1) * 100; // Probability for Drink 1
+            const prob2 = (1 / odd2) * 100; // Probability for Drink 2
+            const total = prob1 + prob2;
+            const normalizedProb1 = (prob1 / total) * 100;
+            const normalizedProb2 = (prob2 / total) * 100;
+
+            if (confirm(`You have selected: ${drink1} (${normalizedProb1.toFixed(2)}%) versus ${drink2} (${normalizedProb2.toFixed(2)}%). Are you sure you want to place this bet?`)) {
                 let countdown = 3;
                 const popupMessage = document.createElement('div');
                 popupMessage.style.position = 'fixed';
@@ -128,7 +134,8 @@
                         popupMessage.innerText = `${countdown}...`;
                     } else {
                         clearInterval(interval);
-                        const outcome = Math.random() < 0.5 ? drink1 : drink2;
+                        const random = Math.random() * 100;
+                        const outcome = random < normalizedProb1 ? drink1 : drink2;
                         popupMessage.innerText = `Outcome: ${outcome}`;
                         setTimeout(() => document.body.removeChild(popupMessage), 2000);
                     }
