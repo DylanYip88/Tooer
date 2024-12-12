@@ -63,27 +63,27 @@
                 <tr>
                     <td>Single Shot</td>
                     <td>Shot Triple Jump</td>
-                    <td><button onclick="placeBet('Single Shot', 'Shot Triple Jump', '1.5 - 3')">1.5 / 3</button></td>
+                    <td><button onclick="placeBet('Single Shot', 'Shot Triple Jump', '1.5 - 3')">1.5 - 3</button></td>
                 </tr>
                 <tr>
                     <td>Beer</td>
                     <td>Dos Beer Shoey</td>
-                    <td><button onclick="placeBet('Beer', 'Dos Beer Shoey', '1.25 - 5')">1.25 / 5</button></td>
+                    <td><button onclick="placeBet('Beer', 'Dos Beer Shoey', '1.25 - 5')">1.25 - 5</button></td>
                 </tr>
                 <tr>
                     <td>Dos Doubles</td>
                     <td>Tour LBR</td>
-                    <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', '1.2 - 5.88')">1.2 / 5.88</button></td>
+                    <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', '1.2 - 5.88')">1.2 - 5.88</button></td>
                 </tr>
                 <tr>
                     <td>Beer</td>
                     <td>Beer with Vodka</td>
-                    <td><button onclick="placeBet('Beer', 'Beer with Vodka', '1.54 - 2.86')">1.54 / 2.86</button></td>
+                    <td><button onclick="placeBet('Beer', 'Beer with Vodka', '1.54 - 2.86')">1.54 - 2.86</button></td>
                 </tr>
                 <tr>
                     <td>Tour LBR</td>
                     <td>Everyone Else Tour LBR</td>
-                    <td><button onclick="placeBet('Tour LBR', 'Everyone Else Tour LBR', '1.11 - 10')">1.11 / 10</button></td>
+                    <td><button onclick="placeBet('Tour LBR', 'Everyone Else Tour LBR', '1.11 - 10')">1.11 - 10</button></td>
                 </tr>
             </tbody>
         </table>
@@ -91,7 +91,7 @@
 
     <script>
         function placeBet(drink1, drink2, odds) {
-            if (confirm(`You have selected: ${drink1}\nversus ${drink2}\n. Are you sure you want to place this bet?`)) {
+            if (confirm(`You have selected: ${drink1}\n versus ${drink2}\n. Are you sure you want to place this bet?`)) {
                 let countdown = 3;
                 const timer = setInterval(() => {
                     if (countdown > 0) {
