@@ -205,6 +205,7 @@
                 document.body.appendChild(popupMessage);
 
                 popupMessage.innerText = `${countdown}...`;
+              
                 const interval = setInterval(() => {
                     countdown--;
                     if (countdown > 0) {
@@ -215,9 +216,4 @@
                         popupMessage.innerText = `Outcome: ${outcome}`;
                         setTimeout(() => document.body.removeChild(popupMessage), 2000);
                     }
-                }, 1000);
-                }
-        }
-    </script>
-</body>
-</html>
+                }, 1000); 
