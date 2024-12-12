@@ -46,6 +46,28 @@
         button:hover {
             background-color: #0056b3;
         }
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
@@ -89,24 +111,65 @@
         </table>
     </div>
 
+    <div id="overlay"></div>
+    <div id="popup">
+        <p id="popup-message"></p>
+        <div id="popup-buttons">
+            <button onclick="confirmBet(true)">Yes</button>
+            <button onclick="confirmBet(false)">No</button>
+        </div>
+    </div>
+
     <script>
+        let currentBet = null;
+
         function placeBet(drink1, drink2, odds1, odds2) {
-            if (confirm(`You have selected: ${drink1} versus ${drink2}. Odds: ${odds1} - ${odds2}\nAre you sure you want to place this bet?`)) {
-                // Start countdown in a single pop-up
+            currentBet = { drink1, drink2, odds1, odds2 };
+            document.getElementById('popup-message').innerText = `You have selected: ${drink1} versus ${drink2}. Odds: ${odds1} - ${odds2}. Are you sure you want to place this bet?`;
+            document.getElementById('popup-buttons').style.display = 'block';
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function confirmBet(isConfirmed) {
+            if (isConfirmed) {
+                // Start the countdown
+                const popupMessage = document.getElementById('popup-message');
+                document.getElementById('popup-buttons').style.display = 'none';
                 let countdown = 3;
-                const outcomeProbability = odds1 / (odds1 + odds2); // Calculate probability based on odds
-                const timer = setInterval(() => {
+                popupMessage.innerText = `${countdown}...`;
+
+                const interval = setInterval(() => {
+                    countdown--;
                     if (countdown > 0) {
-                        alert(`Countdown: ${countdown}`);
-                        countdown--;
+                        popupMessage.innerText = `${countdown}...`;
                     } else {
-                        clearInterval(timer);
-                        // Determine outcome based on probability
-                        const outcome = Math.random() < outcomeProbability ? drink1 : drink2;
-                        alert(`Outcome: ${outcome}`);
+                        clearInterval(interval);
+                        revealOutcome();
                     }
                 }, 1000);
+            } else {
+                closePopup();
             }
+        }
+
+        function revealOutcome() {
+            const { drink1, drink2, odds1, odds2 } = currentBet;
+            const prob1 = 1 / odds1;
+            const prob2 = 1 / odds2;
+            const totalProb = prob1 + prob2;
+            const normalizedProb1 = prob1 / totalProb;
+
+            const outcome = Math.random() < normalizedProb1 ? drink1 : drink2;
+            document.getElementById('popup-message').innerText = `Outcome: ${outcome}`;
+
+            setTimeout(closePopup, 3000); // Close popup after showing the outcome
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+            currentBet = null;
         }
     </script>
 </body>
