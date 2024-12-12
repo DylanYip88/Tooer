@@ -1,98 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phallus365</title>
-  <style>
-    body {
-      background-color: #2b2b2b;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-
-    #sidebar {
-      background-color: #1a1a1a;
-      width: 200px;
-      padding: 20px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    }
-
-    #sidebar h2 {
-      color: #fff;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    #sidebar a {
-      display: block;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px;
-      margin: 5px 0;
-      background-color: #333;
-      border-radius: 5px;
-      text-align: center;
-    }
-
-    #sidebar a:hover {
-      background-color: #444;
-    }
-
-    #main {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .container {
-      background-color: #165016;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      width: 100%;
-      max-width: 600px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    #phallus365-title {
-      color: white;
-    }
-
-    #phallus365-title span {
-      color: yellow;
-    }
-
-    .superboost {
-      margin-bottom: 20px;
-      font-weight: bold;
-      color: yellow;
-      text-align: center;
-    }
-
-    .table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    .table th, .table td {
-      border: 1px solid #fff;
-      padding: 10px;
-      text-align: center;
-    }
-
-    table {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phallus365</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #333333; /* Dark grey background */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 500px;
+            background: #225522; /* Dark green background */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+        .superboost {
+            font-size: 18px;
+            color: yellow;
+            font-weight: bold;
+            padding: 10px 0;
+        }
+        table {
             width: 100%;
             border-collapse: collapse;
         }
@@ -118,15 +52,10 @@
         button:hover {
             background-color: #0056b3;
         }
-  </style>
+    </style>
 </head>
 <body>
-  <div id="sidebar">
-  <a href="index.html">Sports Betting</a>
-  <a href="slotmachine.html">Slot Machine</a>
-  <a href="roulette.html">Roulette</a>
-</div>
-  <div class="container">
+    <div class="container">
         <h2>Phallus365</h2>
         <div class="superboost">
             Superboost: Drink of your choice <button onclick="placeSuperboostBet()">2</button>
@@ -154,7 +83,7 @@
                     <td>Dos Doubles</td>
                     <td>Tour LBR</td>
                     <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', '1.2 - 5.88')">1.2 - 5.88</button></td>
-                   </tr>
+                </tr>
                 <tr>
                     <td>Beer</td>
                     <td>Beer with Vodka</td>
@@ -190,7 +119,7 @@
                     countdown--;
                     if (countdown > 0) {
                         popupMessage.innerText = `${countdown}...`;
-                       } else {
+                    } else {
                         clearInterval(interval);
                         const outcome = Math.random() < 0.5 ? drink1 : drink2;
                         popupMessage.innerText = `Outcome: ${outcome}`;
@@ -215,7 +144,7 @@
                 document.body.appendChild(popupMessage);
 
                 popupMessage.innerText = `${countdown}...`;
-              
+
                 const interval = setInterval(() => {
                     countdown--;
                     if (countdown > 0) {
