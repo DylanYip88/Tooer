@@ -8,26 +8,23 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background-color: #333333; /* Dark grey background */
             margin: 0;
             padding: 0;
         }
         .container {
             margin: 20px auto;
             max-width: 500px;
-            background: white;
+            background: #225522; /* Dark green background */
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
         }
         .superboost {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: black;
+            font-size: 18px;
             color: yellow;
             font-weight: bold;
-            border: 2px solid yellow;
-            border-radius: 5px;
+            padding: 10px 0;
         }
         table {
             width: 100%;
@@ -60,14 +57,9 @@
 <body>
     <div class="container">
         <h2>Phallus365</h2>
-
-        <!-- Superboost Section -->
         <div class="superboost">
-            Superboost: Drink of your choice
-            <button onclick="placeSuperboostBet()">2</button>
+            Superboost: Drink of your choice <button onclick="placeSuperboostBet()">2</button>
         </div>
-
-        <!-- Main Table -->
         <table>
             <thead>
                 <tr>
@@ -109,18 +101,18 @@
     <script>
         function placeBet(drink1, drink2, odds) {
             if (confirm(`You have selected: ${drink1} versus ${drink2}. Are you sure you want to place this bet?`)) {
+                let countdown = 3;
                 const popupMessage = document.createElement('div');
                 popupMessage.style.position = 'fixed';
                 popupMessage.style.top = '50%';
                 popupMessage.style.left = '50%';
                 popupMessage.style.transform = 'translate(-50%, -50%)';
-                popupMessage.style.backgroundColor = 'white';
                 popupMessage.style.padding = '20px';
-                popupMessage.style.border = '2px solid black';
-                popupMessage.style.textAlign = 'center';
+                popupMessage.style.background = 'white';
+                popupMessage.style.borderRadius = '10px';
+                popupMessage.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
                 document.body.appendChild(popupMessage);
 
-                let countdown = 3;
                 popupMessage.innerText = `${countdown}...`;
 
                 const interval = setInterval(() => {
@@ -129,33 +121,28 @@
                         popupMessage.innerText = `${countdown}...`;
                     } else {
                         clearInterval(interval);
-                        const drink1Chance = 1 / parseFloat(odds.split(' - ')[0]);
-                        const drink2Chance = 1 / parseFloat(odds.split(' - ')[1]);
-                        const totalChance = drink1Chance + drink2Chance;
-
-                        const outcome = Math.random() < drink1Chance / totalChance ? drink1 : drink2;
+                        const outcome = Math.random() < 0.5 ? drink1 : drink2;
                         popupMessage.innerText = `Outcome: ${outcome}`;
-
-                        setTimeout(() => document.body.removeChild(popupMessage), 3000);
+                        setTimeout(() => document.body.removeChild(popupMessage), 2000);
                     }
                 }, 1000);
             }
         }
 
         function placeSuperboostBet() {
-            if (confirm(`You have selected: Superboost - Drink of your choice. Are you sure you want to place this bet?`)) {
+            if (confirm(`You have selected: Superboost. Are you sure you want to place this bet?`)) {
+                let countdown = 3;
                 const popupMessage = document.createElement('div');
                 popupMessage.style.position = 'fixed';
                 popupMessage.style.top = '50%';
                 popupMessage.style.left = '50%';
                 popupMessage.style.transform = 'translate(-50%, -50%)';
-                popupMessage.style.backgroundColor = 'white';
                 popupMessage.style.padding = '20px';
-                popupMessage.style.border = '2px solid black';
-                popupMessage.style.textAlign = 'center';
+                popupMessage.style.background = 'white';
+                popupMessage.style.borderRadius = '10px';
+                popupMessage.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
                 document.body.appendChild(popupMessage);
 
-                let countdown = 3;
                 popupMessage.innerText = `${countdown}...`;
 
                 const interval = setInterval(() => {
@@ -166,8 +153,7 @@
                         clearInterval(interval);
                         const outcome = Math.random() < 0.5 ? 'Jack Drinks' : 'Opposition Drinks';
                         popupMessage.innerText = `Outcome: ${outcome}`;
-
-                        setTimeout(() => document.body.removeChild(popupMessage), 3000);
+                        setTimeout(() => document.body.removeChild(popupMessage), 2000);
                     }
                 }, 1000);
             }
