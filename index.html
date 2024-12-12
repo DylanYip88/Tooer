@@ -144,6 +144,42 @@
                     <td>Dos Doubles</td>
                     <td>Tour LBR</td>
                     <td><button onclick="placeBet('Dos Doubles', 'Tour LBR', '1.2 - 5.88')">1.2 - 5.88</button></td>
+                   </tr>
+                <tr>
+                    <td>Beer</td>
+                    <td>Beer with Vodka</td>
+                    <td><button onclick="placeBet('Beer', 'Beer with Vodka', '1.54 - 2.86')">1.54 - 2.86</button></td>
+                </tr>
+                <tr>
+                    <td>Tour LBR</td>
+                    <td>Everyone Else Tour LBR</td>
+                    <td><button onclick="placeBet('Tour LBR', 'Everyone Else Tour LBR', '1.11 - 10')">1.11 - 10</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function placeBet(drink1, drink2, odds) {
+            if (confirm(`You have selected: ${drink1} versus ${drink2}. Are you sure you want to place this bet?`)) {
+                let countdown = 3;
+                const popupMessage = document.createElement('div');
+                popupMessage.style.position = 'fixed';
+                popupMessage.style.top = '50%';
+                popupMessage.style.left = '50%';
+                popupMessage.style.transform = 'translate(-50%, -50%)';
+                popupMessage.style.padding = '20px';
+                popupMessage.style.background = 'white';
+                popupMessage.style.borderRadius = '10px';
+                popupMessage.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                document.body.appendChild(popupMessage);
+
+                popupMessage.innerText = `${countdown}...`;
+
+                const interval = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        popupMessage.innerText = `${countdown}...`;
 
 
 
